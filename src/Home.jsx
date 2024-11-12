@@ -24,7 +24,7 @@ const Home = () => {
 
   const search = (data) => {
     const updatedData = data.filter((item) =>
-      keys.some((key) => item[key].common.toLowerCase().includes(inputField))
+      keys.some((key) => item[key].common.includes(inputField))
     );
     console.log("updated-data", updatedData);
     setCountries(updatedData);
@@ -42,13 +42,13 @@ const Home = () => {
         value={inputField}
         onChange={(e) => setInputField(e.target.value)}
       />
-      <div className="grid-container">
+      <div className="container">
         {Array.from(
           countries.map((country, id) => (
             <div key={id} className="countryCard">
               <img src={country.flags.png} alt={country.name.common} />
               <br />
-              <strong>{country.name.common}</strong>
+              <h2>{country.name.common}</h2>
             </div>
           ))
         )}
