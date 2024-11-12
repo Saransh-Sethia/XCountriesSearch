@@ -24,7 +24,7 @@ const Home = () => {
 
   const search = (data) => {
     const updatedData = data.filter((item) =>
-      keys.some((key) => item[key].common.includes(inputField))
+      keys.some((key) => item[key].common.toLowerCase().includes(inputField))
     );
     console.log("updated-data", updatedData);
     setCountries(updatedData);
