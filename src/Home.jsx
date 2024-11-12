@@ -1,56 +1,57 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./App.css";
 
 const Home = () => {
-  const API_URL = "https://xcountries-backend.azurewebsites.net/all";
+  const API_URL = "https://restcountries.com/v3.1/all";
   const [countries, setCountries] = useState([]);
   const [inputField, setInputField] = useState("");
 
   const keys = ["name"];
 
-
-
   const fetchData = async () => {
     try {
       const response = await axios.get(API_URL);
       const result = await response.data;
-      console.log("result", result);
       setCountries(result);
     } catch (error) {
-      console.log("message", error.message);
+      console.log("error", error);
     }
   };
-
-  const search = (data) => {
-    const updatedData =  data.filter((item) =>
-      keys.some((key) => item[key].toLowerCase().includes(inputField))
-    );
-    
-    setCountries(updatedData);
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
 
-  useEffect(()=>{
-    search(countries)
-  },[inputField])
+  const search = (data) => {
+    const updatedData = data.filter((item) =>
+      keys.some((key) => item[key].common.toLowerCase().includes(inputField))
+    );
+    console.log("updated-data", updatedData);
+    setCountries(updatedData);
+  };
+
+  useEffect(() => {
+    search(countries);
+  }, [inputField]);
+
   return (
     <>
       <input
-        placeholder="Search for countries..."
+        placeholder="Enter country name..."
         type="text"
         value={inputField}
         onChange={(e) => setInputField(e.target.value)}
       />
       <div className="grid-container">
-        {countries.map((country,id) => (
-          <div className="countryCard" key={id}>
-            <img src={country.flag} alt={country.name} />
-            <h3>{country.name}</h3>
-          </div>
-        ))}
+        {Array.from(
+          countries.map((country, id) => (
+            <div key={id} className="countryCard">
+              <img src={country.flags.png} alt={country.name.common} />
+              <br />
+              <strong>{country.name.common}</strong>
+            </div>
+          ))
+        )}
       </div>
     </>
   );
